@@ -4,6 +4,8 @@ WORKDIR FletTutorial/
 
 COPY requirements.txt .
 
+RUN apt-get update && apt-get install -y libstdc++6
+
 RUN pip install -r requirements.txt
 
 COPY . .
