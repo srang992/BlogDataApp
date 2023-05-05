@@ -1,9 +1,7 @@
-import webbrowser
 import flet as ft
-import pyperclip
 
 
-def ArticleCard(page, title, author, link):
+def ArticleCard(page, title, desc, link):
 
     async def open_link(e):
         await page.launch_url_async(link)
@@ -14,15 +12,19 @@ def ArticleCard(page, title, author, link):
                     [
                         ft.ListTile(
                             leading=ft.Icon(ft.icons.ARTICLE),
-                            title=ft.Text(title, color="black"),
-                            subtitle=ft.Text(author),
+                            title=ft.Text(title,
+                                          style=ft.TextThemeStyle.TITLE_SMALL,
+                                          size=16,
+                                          max_lines=2,
+                                          overflow=ft.TextOverflow.ELLIPSIS),
+                            subtitle=ft.Text(desc, max_lines=2, overflow=ft.TextOverflow.ELLIPSIS),
                             disabled=True,
                         ),
                         ft.Row(
                             [ft.TextButton("Go to Link", icon="link", on_click=open_link)],
                             alignment=ft.MainAxisAlignment.END,
                         ),
-                    ]
+                    ],
                 ),
                 width=400,
                 padding=10,

@@ -1,6 +1,8 @@
 from oauth2client.service_account import ServiceAccountCredentials
 import gspread
+import re
 import feedparser
+from bs4 import BeautifulSoup
 
 scope = ['https://www.googleapis.com/auth/spreadsheets',
          "https://www.googleapis.com/auth/drive"]
@@ -15,12 +17,16 @@ feed2 = feedparser.parse("https://www.analyticsvidhya.com/blog/author/subhradeep
 
 
 sheet.clear()
-sheet.append_row(['Title', 'Link', 'Author', 'Publication Date'])
+sheet.append_row(['Title', 'Link', 'Author', 'Publication Date', "Description"])
 
 for entry in feed1.entries:
-    sheet.append_row([entry.title, entry.link, entry.author, entry.published])
+    soup = BeautifulSoup(entry.description, "html.parser")
+    sheet.append_row([entry.title, entry.link, entry.author, entry.published, soup.text])
+
 
 for entry in feed2.entries:
-    sheet.append_row([entry.title, entry.link, entry.author, entry.published])
+    soup = BeautifulSoup(entry.description, "html.parser")
+    text = re.sub(r'[^a-zA-Z .,]', "", soup.text)
+    sheet.append_row([entry.title, entry.link, entry.author, entry.published, soup.text])
 
 print("Data Updated Successfully!")

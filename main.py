@@ -17,7 +17,7 @@ async def get_data():
 
 
 async def main(page: ft.Page):
-    page.title = "ListView"
+    page.title = "My Articles"
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     lv = ft.ListView(expand=1, spacing=10, padding=20)
 
@@ -25,7 +25,7 @@ async def main(page: ft.Page):
 
     for i in range(0, article_data.shape[0]):
         lv.controls.append(
-            ArticleCard(page, article_data.Title[i], article_data.Author[i], article_data.Link[i])
+            ArticleCard(page, article_data.Title[i], article_data.Description[i], article_data.Link[i])
         )
 
     await page.add_async(

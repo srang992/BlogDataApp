@@ -1,6 +1,4 @@
 flet
-pyperclip
 gspread
 oauth2client
 pandas
-asyncio
