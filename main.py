@@ -24,7 +24,9 @@ async def main(page: ft.Page):
     article_data = await get_data()
 
     for i in range(0, article_data.shape[0]):
-        lv.controls.append(ArticleCard(article_data.Title[i], article_data.Author[i], article_data.Link[i]))
+        lv.controls.append(
+            ArticleCard(page, article_data.Title[i], article_data.Author[i], article_data.Link[i])
+        )
 
     await page.add_async(
         ft.Container(

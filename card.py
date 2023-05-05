@@ -1,18 +1,12 @@
-import os
+import webbrowser
 import flet as ft
 import pyperclip
 
 
-def ArticleCard(title, author, link):
+def ArticleCard(page, title, author, link):
 
-    def open_link(e):
-        if os.name =='nt':
-            os.system('start ' + link)
-        else:
-            os.system('xdg-open ' + link)
-
-    def copy_link(e):
-        pyperclip.copy(link)
+    async def open_link(e):
+        await page.launch_url_async(link)
 
     return ft.Card(
             content=ft.Container(
