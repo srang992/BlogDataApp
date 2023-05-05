@@ -1,4 +1,4 @@
-import webbrowser
+import os
 import flet as ft
 import pyperclip
 
@@ -6,7 +6,10 @@ import pyperclip
 def ArticleCard(title, author, link):
 
     def open_link(e):
-        webbrowser.open_new_tab(link)
+        if os.name =='nt':
+            os.system('start ' + link)
+        else:
+            os.system('xdg-open ' + link)
 
     def copy_link(e):
         pyperclip.copy(link)
@@ -22,8 +25,7 @@ def ArticleCard(title, author, link):
                             disabled=True,
                         ),
                         ft.Row(
-                            [ft.TextButton("Copy Link", icon="copy", on_click=copy_link),
-                             ft.TextButton("Go to Link", icon="link", on_click=open_link)],
+                            [ft.TextButton("Go to Link", icon="link", on_click=open_link)],
                             alignment=ft.MainAxisAlignment.END,
                         ),
                     ]
