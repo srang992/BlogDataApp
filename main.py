@@ -17,6 +17,9 @@ async def main(page: ft.Page):
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     lv = ft.ListView(expand=1, spacing=10, padding=20)
 
+    async def subscribe_in_newsletter(e):
+        await page.launch_url_async("https://forms.gle/Tnbu3sGFdnLuzu518")
+
     article_data = await get_data()
 
     for i in range(0, article_data.shape[0]):
@@ -36,9 +39,14 @@ async def main(page: ft.Page):
                     value="Here I listed all of my Data Science Articles I wrote till now. Don't forget to check it out!",
                     size=16,
                     font_family="Alkatra",
-                    ),
+                ),
+                ft.ElevatedButton(
+                    "Subscribe to My Newsletter",
+                    icon=ft.icons.SUBSCRIPTIONS,
+                    on_click=subscribe_in_newsletter
+                )
             ], horizontal_alignment=ft.CrossAxisAlignment.CENTER
-            ), padding=20,
+            ), padding=5,
         ),
         lv
     )
