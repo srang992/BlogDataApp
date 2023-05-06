@@ -17,6 +17,10 @@ async def get_data():
 
 
 async def main(page: ft.Page):
+    page.fonts = {
+        "Courgette": "fonts/Courgette-Regular.ttf",
+        "Alkatra": "fonts/Alkatra-Regular.ttf"
+    }
     page.title = "My Articles"
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     lv = ft.ListView(expand=1, spacing=10, padding=20)
@@ -34,10 +38,12 @@ async def main(page: ft.Page):
                 ft.Text(value="Subhradeep's Articles",
                         size=32,
                         weight=ft.FontWeight.BOLD,
+                        font_family="Courgette"
                         ),
                 ft.Text(
                     value="Here I listed all of my Data Science Articles I wrote till now. Don't forget to check it out!",
-                    size=15,
+                    size=16,
+                    font_family="Alkatra",
                     ),
             ], horizontal_alignment=ft.CrossAxisAlignment.CENTER
             ), padding=20,
@@ -47,4 +53,4 @@ async def main(page: ft.Page):
 
 
 if __name__ == '__main__':
-    ft.app(target=main, view=ft.WEB_BROWSER, port=8080)
+    ft.app(target=main, view=ft.WEB_BROWSER, port=8080, assets_dir="assets")
