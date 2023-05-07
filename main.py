@@ -1,6 +1,8 @@
 import flet as ft
-from card import ArticleCard
 import pandas as pd
+from utils import *
+from custom_widgets.list_upper_sections import TitleText, SubtitleText, SubscriptionButton
+from custom_widgets.card import ArticleCard
 
 
 async def get_data():
@@ -9,48 +11,40 @@ async def get_data():
 
 
 async def main(page: ft.Page):
-    page.fonts = {
-        "Courgette": "fonts/Courgette-Regular.ttf",
-        "Alkatra": "fonts/Alkatra-Regular.ttf"
-    }
-    page.title = "My Articles"
+    page.padding = 2
+    page.fonts = fonts
+    page.title = title
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
-    lv = ft.ListView(expand=1, spacing=10, padding=20)
-
-    async def subscribe_in_newsletter(e):
-        await page.launch_url_async("https://forms.gle/Tnbu3sGFdnLuzu518")
+    lv = ft.ListView(expand=True, spacing=10, padding=15)
 
     article_data = await get_data()
 
     for i in range(0, article_data.shape[0]):
         lv.controls.append(
-            ArticleCard(page, article_data.Title[i], article_data.Description[i], article_data.Link[i])
+            ArticleCard(
+                title=article_data.Title[i],
+                title_font_family=title_font,
+                desc=article_data.Description[i],
+                desc_font_family=desc_font,
+                link=article_data.Link[i],
+            )
         )
 
     await page.add_async(
         ft.Container(
             ft.Column([
-                ft.Text(value="Subhradeep's Articles",
-                        size=32,
-                        weight=ft.FontWeight.BOLD,
-                        font_family="Courgette"
-                        ),
-                ft.Text(
-                    value="Here I listed all of my Data Science Articles I wrote till now. Don't forget to check it out!",
-                    size=16,
-                    font_family="Alkatra",
+                TitleText(text=title, font_family=title_font),
+                SubtitleText(text=subtitle, font_family=desc_font),
+                SubscriptionButton(
+                    button_text=subscription_button_text,
+                    link=subscription_form_link
                 ),
-                ft.ElevatedButton(
-                    "Subscribe to My Newsletter",
-                    icon=ft.icons.SUBSCRIPTIONS,
-                    on_click=subscribe_in_newsletter
-                )
             ], horizontal_alignment=ft.CrossAxisAlignment.CENTER
-            ), padding=5,
+            ), padding=10,
         ),
         lv
     )
 
 
 if __name__ == '__main__':
-    ft.app(target=main, view=ft.WEB_BROWSER, port=8080, assets_dir="assets")
+    ft.app(target=main, assets_dir="assets")

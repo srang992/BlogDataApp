@@ -1,42 +1,52 @@
 import flet as ft
 
 def main(page: ft.Page):
+    def items(count):
+        items = []
+        for i in range(1, count + 1):
+            items.append(
+                ft.Container(
+                    content=ft.Text(value=str(i)),
+                    alignment=ft.alignment.center,
+                    width=50,
+                    height=50,
+                    bgcolor=ft.colors.AMBER,
+                    border_radius=ft.border_radius.all(5),
+                )
+            )
+        return items
 
-    rail = ft.NavigationRail(
-        selected_index=0,
-        label_type=ft.NavigationRailLabelType.ALL,
-        # extended=True,
-        min_width=100,
-        min_extended_width=400,
-        leading=ft.FloatingActionButton(icon=ft.icons.CREATE, text="Add"),
-        group_alignment=-0.9,
-        destinations=[
-            ft.NavigationRailDestination(
-                icon=ft.icons.FAVORITE_BORDER, selected_icon=ft.icons.FAVORITE, label="First"
-            ),
-            ft.NavigationRailDestination(
-                icon_content=ft.Icon(ft.icons.BOOKMARK_BORDER),
-                selected_icon_content=ft.Icon(ft.icons.BOOKMARK),
-                label="Second",
-            ),
-            ft.NavigationRailDestination(
-                icon=ft.icons.SETTINGS_OUTLINED,
-                selected_icon_content=ft.Icon(ft.icons.SETTINGS),
-                label_content=ft.Text("Settings"),
-            ),
-        ],
-        on_change=lambda e: print("Selected destination:", e.control.selected_index),
+    def slider_change(e):
+        row.width = float(e.control.value)
+        row.update()
+
+    width_slider = ft.Slider(
+        min=0,
+        max=page.window_width,
+        divisions=20,
+        value=page.window_width,
+        label="{value}",
+        on_change=slider_change,
+    )
+
+    row = ft.Row(
+        wrap=True,
+        spacing=10,
+        run_spacing=10,
+        controls=items(30),
+        width=page.window_width,
     )
 
     page.add(
-        ft.Row(
+        ft.Column(
             [
-                rail,
-                ft.VerticalDivider(width=1),
-                ft.Column([ ft.Text("Body!")], alignment=ft.MainAxisAlignment.START, expand=True),
-            ],
-            expand=True,
-        )
+                ft.Text(
+                    "Change the row width to see how child items wrap onto multiple rows:"
+                ),
+                width_slider,
+            ]
+        ),
+        row,
     )
 
 ft.app(target=main)
