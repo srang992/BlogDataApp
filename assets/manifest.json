@@ -1,0 +1,6 @@
+{
+  "name": "Subhradeep's Article",
+  "short_name": "SubR's Articles",
+  "description": "This app displays the list of all articles written by Subhradeep Rang.",
+  "display": "standalone"
+}

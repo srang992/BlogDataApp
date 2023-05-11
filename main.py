@@ -6,31 +6,17 @@ from custom_widgets.card import ArticleCard
 
 
 async def get_data():
-    df = pd.read_csv("BlogData.csv")
+    df = pd.read_csv("data/BlogData.csv")
     return df
 
 
 async def main(page: ft.Page):
-    page.padding = 2
+    page.padding = 15
     page.fonts = fonts
     page.title = title
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
-    lv = ft.ListView(expand=True, spacing=10, padding=15)
-
-    article_data = await get_data()
-
-    for i in range(0, article_data.shape[0]):
-        lv.controls.append(
-            ArticleCard(
-                title=article_data.Title[i],
-                title_font_family=title_font,
-                desc=article_data.Description[i],
-                desc_font_family=desc_font,
-                link=article_data.Link[i],
-            )
-        )
-
-    await page.add_async(
+    # lv = ft.ListView(expand=True, spacing=10, padding=15,)
+    col = ft.Column([
         ft.Container(
             ft.Column([
                 TitleText(text=title, font_family=title_font),
@@ -42,7 +28,28 @@ async def main(page: ft.Page):
             ], horizontal_alignment=ft.CrossAxisAlignment.CENTER
             ), padding=10,
         ),
-        lv
+    ],
+        expand=True,
+        spacing=10,
+        scroll=ft.ScrollMode.HIDDEN,
+        horizontal_alignment=ft.CrossAxisAlignment.CENTER
+    )
+
+    article_data = await get_data()
+
+    for i in range(0, article_data.shape[0]):
+        col.controls.append(
+            ArticleCard(
+                title=article_data.Title[i],
+                title_font_family=title_font,
+                desc=article_data.Description[i],
+                desc_font_family=desc_font,
+                link=article_data.Link[i],
+            )
+        )
+
+    await page.add_async(
+        col
     )
 
 
