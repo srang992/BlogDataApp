@@ -1,4 +1,3 @@
 flet
-gspread
-oauth2client
-pandas
+BeautifulSoup4
+feedparser

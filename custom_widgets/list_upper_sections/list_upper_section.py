@@ -48,5 +48,8 @@ class SubscriptionButton(ft.UserControl):
                 ft.Icon(ft.icons.SUBSCRIPTIONS),
                 ft.Text(self.button_text, font_family=self.font_family)
             ], wrap=True),
-            on_click=on_button_click
+            on_click=on_button_click,
+            style=ft.ButtonStyle(
+                padding=16
+            )
         )

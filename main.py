@@ -1,22 +1,25 @@
 import flet as ft
-import pandas as pd
 from utils import *
+import feedparser
 from custom_widgets.list_upper_sections import TitleText, SubtitleText, SubscriptionButton
 from custom_widgets.card import ArticleCard
+from bs4 import BeautifulSoup
 
 
 async def get_data():
-    df = pd.read_csv("data/BlogData.csv")
-    return df
+    medium_feed = feedparser.parse("https://medium.com/feed/@srang992")
+    av_data = feedparser.parse("https://www.analyticsvidhya.com/blog/author/subhradeep06/feed/")
+    return medium_feed, av_data
 
 
 async def main(page: ft.Page):
-    page.padding = 15
+    page.padding = 2
     page.fonts = fonts
     page.title = title
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
-    # lv = ft.ListView(expand=True, spacing=10, padding=15,)
-    col = ft.Column([
+    lv = ft.ListView(expand=True, spacing=10, padding=15, )
+
+    lv.controls.append(
         ft.Container(
             ft.Column([
                 TitleText(text=title, font_family=title_font),
@@ -28,28 +31,36 @@ async def main(page: ft.Page):
             ], horizontal_alignment=ft.CrossAxisAlignment.CENTER
             ), padding=10,
         ),
-    ],
-        expand=True,
-        spacing=10,
-        scroll=ft.ScrollMode.HIDDEN,
-        horizontal_alignment=ft.CrossAxisAlignment.CENTER
     )
 
-    article_data = await get_data()
+    medium_data, av_data = await get_data()
 
-    for i in range(0, article_data.shape[0]):
-        col.controls.append(
+    for entry1 in medium_data.entries:
+        soup = BeautifulSoup(entry1.description, "html.parser")
+        lv.controls.append(
             ArticleCard(
-                title=article_data.Title[i],
+                title=entry1.title,
                 title_font_family=title_font,
-                desc=article_data.Description[i],
+                desc=soup.text,
                 desc_font_family=desc_font,
-                link=article_data.Link[i],
+                link=entry1.link,
+            )
+        )
+
+    for entry2 in av_data.entries:
+        soup = BeautifulSoup(entry2.description, "html.parser")
+        lv.controls.append(
+            ArticleCard(
+                title=entry2.title,
+                title_font_family=title_font,
+                desc=soup.text,
+                desc_font_family=desc_font,
+                link=entry2.link,
             )
         )
 
     await page.add_async(
-        col
+        lv
     )
 
 
